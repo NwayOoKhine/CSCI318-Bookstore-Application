@@ -2,6 +2,7 @@ package com.bookstore.controller;
 
 import com.bookstore.model.Book;
 import com.bookstore.service.BookService;
+import com.bookstore.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,26 +31,42 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-        return bookService.getBookById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getBookById(@PathVariable Long id) {
+        try {
+            Book book = bookService.getBookById(id);
+            return ResponseEntity.ok(book);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @GetMapping("/search/{title}")
-    public ResponseEntity<List<Book>> searchBooks(@PathVariable String title) {
-        return ResponseEntity.ok(bookService.searchBooksByTitle(title));
+    public ResponseEntity<?> searchBooks(@PathVariable String title) {
+        try {
+            List<Book> books = bookService.searchBooksByTitle(title);
+            return ResponseEntity.ok(books);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @GetMapping("/isbn/{isbn}")
-    public ResponseEntity<Book> getBookByIsbn(@PathVariable String isbn) {
-        return bookService.getBookByIsbn(isbn)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> getBookByIsbn(@PathVariable String isbn) {
+        try {
+            Book book = bookService.getBookByIsbn(isbn);
+            return ResponseEntity.ok(book);
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 
     @GetMapping("/availability/{isbn}")
-    public ResponseEntity<Boolean> checkBookAvailability(@PathVariable String isbn) {
-        return ResponseEntity.ok(bookService.isBookAvailable(isbn));
+    public ResponseEntity<?> checkBookAvailability(@PathVariable String isbn) {
+        try {
+            boolean isAvailable = bookService.isBookAvailable(isbn);
+            return ResponseEntity.ok(isAvailable ? "Book is available" : "Book is out of stock");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
     }
 }

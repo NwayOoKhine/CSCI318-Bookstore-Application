@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Table(name = "users")
 public class User extends BaseEntity {
 
+    // id is inherited from BaseEntity
     @Column(nullable = false, unique = true)
     private String username;
 
@@ -28,9 +29,6 @@ public class User extends BaseEntity {
         this.password = password;
         this.role = role;
     }
-
-    // Getters and setters for username, email, password, and role
-    // (id getter and setter are inherited from BaseEntity)
 
     public String getUsername() {
         return username;

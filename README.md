@@ -116,3 +116,10 @@ This project implements basic security measures, including password hashing when
 ## Database
 
 The application uses an H2 in-memory database. The database is initialized with the application startup and is destroyed when the application stops.
+
+## Error Handling
+
+This API implements custom error handling for cases where resources are not found. For example:
+
+- When searching for a book by ISBN that doesn't exist, you'll receive a 404 status code with a message like: "Book not found with ISBN: {searched_isbn}"
+- When searching for a user by ID or username that doesn't exist, you'll receive a 404 status code with a message like: "User not found with id: {id}" or "User not found with username: {username}"

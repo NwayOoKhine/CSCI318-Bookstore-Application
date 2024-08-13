@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 @Table(name = "books")
 public class Book extends BaseEntity {
 
+    // id is inherited from BaseEntity
     @Column(nullable = false)
     private String title;
 
@@ -31,9 +32,6 @@ public class Book extends BaseEntity {
         this.price = price;
         this.stock = stock;
     }
-
-    // Getters and setters for title, author, isbn, price, and stock
-    // (id getter and setter are inherited from BaseEntity)
 
     public String getTitle() {
         return title;

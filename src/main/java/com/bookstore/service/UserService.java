@@ -2,12 +2,12 @@ package com.bookstore.service;
 
 import com.bookstore.model.User;
 import com.bookstore.repository.UserRepository;
+import com.bookstore.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -34,17 +34,13 @@ public class UserService {
         return users;
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id).map(user -> {
-            user.setPassword(null);
-            return user;
-        });
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username).map(user -> {
-            user.setPassword(null);
-            return user;
-        });
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
     }
 }
